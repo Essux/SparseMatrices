@@ -1,9 +1,9 @@
 #pragma once
-#include "Matrix.h"
+#include "SparseMatrix.h"
 #include "DenseMatrix.h"
 
 template <typename T>
-class COO : public Matrix<T> {
+class COO : public SparseMatrix<T> {
 
     public:
     int nonempty_values;
