@@ -2,7 +2,7 @@
 #include "DenseMatrix.cpp"
 
 template <typename T>
-class Matrix {
+class SparseMatrix {
     public:
     virtual DenseMatrix<T> to_dense()=0;
 };

@@ -20,4 +20,5 @@ int main() {
     for (int i = 0; i < b.nonempty_values; i++) {
         printf("row %d col %d value %.2f\n", b.rows[i], b.cols[i], b.values[i]);
     }
+
 }
