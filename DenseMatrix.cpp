@@ -19,7 +19,7 @@ DenseMatrix<T>::DenseMatrix(vector<T> mat_, int cols_, int rows_) {
 
 template <typename T>
 int DenseMatrix<T>::get_num_of_cols() {
-    return get_num_of_cols;
+    return num_of_cols;
 }
 
 template <typename T>
