@@ -5,7 +5,7 @@ using namespace std;
 
 template <typename T>
 T DenseMatrix<T>::get_pos(int row, int col) {
-    return mat[row*num_of_cols+col];
+    return mat[row*n_cols + col];
 }
 
 template <typename T>
