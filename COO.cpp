@@ -4,9 +4,7 @@
 
 template <typename T>
 COO<T> COO<T>::from_dense(DenseMatrix<T> mat) {
-    COO<T> repr;
-    repr.n_rows = mat.get_n_rows();
-    repr.n_cols = mat.get_n_cols();
+    COO<T> repr(mat.get_n_rows(), mat.get_n_cols());
 
     for (int i = 0; i < mat.get_n_rows(); i++) {
         for (int j = 0; j < mat.get_n_cols(); j++) {
@@ -34,6 +32,6 @@ DenseMatrix<T> COO<T>::to_dense() {
 }
 
 template <typename T>
-COO<T>::COO() {
+COO<T>::COO(int n_rows_, int n_cols_) : SparseMatrix<T>::SparseMatrix(n_rows_, n_cols_) {
     nonempty_values = 0;
 }
