@@ -1,4 +1,5 @@
 #include "COO.h"
+#include "CSR.h"
 #include <iostream>
 #include <cstdio>
 
@@ -32,4 +33,9 @@ int main() {
     for (int i = 0; i < N; i++) {
         printf("%.3f ", ans[i]);
     } printf("\n");
+
+    printf("-------------------------CSR-------------------------\n");
+    CSR c = CSR::from_dense(a);
+    c.print_matrix();
+    printf("-------------------------CSC-------------------------\n");
 }

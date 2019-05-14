@@ -13,6 +13,7 @@ class COO : public SparseMatrix {
     static COO from_dense(DenseMatrix mat);
     DenseMatrix to_dense();
     vector<double> mul(vector<double> x);
+    void print_matrix();
 
     COO(int n_rows_, int n_cols_);
 };
