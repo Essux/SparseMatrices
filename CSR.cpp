@@ -25,7 +25,12 @@ void CSR::print_matrix() {
     for(int i = 0; i < nonempty_values; i++) {
         printf("row %d col %d value %.2f\n", IA[i], JA[i], AA[i]);
     }
-} 
+}
+
+// MISSING IMPLEMENTATION
+vector<double> CSR::mul(vector<double> x) {
+
+}
 
 // MISSING IMPLEMENTATION
 DenseMatrix CSR::to_dense() {

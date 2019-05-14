@@ -25,7 +25,7 @@ void COO::add_value(double val, int row, int col) {
 
 // MISSING IMPLEMENTATION
 DenseMatrix COO::to_dense() {
-
+    throw "not implemented";
 }
 
 // MISSING IMPLEMENTATION
@@ -35,4 +35,12 @@ void COO::print_matrix() {
 
 COO::COO(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {
     nonempty_values = 0;
+}
+
+vector<double> COO::mul(vector<double> x){
+    vector<double> b(x.size(), 0);
+    for (int i = 0; i < nonempty_values; i++) {
+        b[rows[i]] += x[cols[i]] * values[i];
+    }
+    return b;
 }

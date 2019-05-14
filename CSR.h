@@ -10,6 +10,7 @@ class CSR : public SparseMatrix {
 
     DenseMatrix to_dense();
     void print_matrix();
+    vector<double> mul(vector<double> x);
 
     static CSR from_dense(DenseMatrix mat);
     CSR(int n_rows_, int n_cols_);
