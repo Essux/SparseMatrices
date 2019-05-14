@@ -7,6 +7,7 @@ class SparseMatrix {
         int n_rows, n_cols;
     public:
         virtual DenseMatrix to_dense()=0;
+	virtual void print_matrix()=0;
         int get_n_rows();
         int get_n_cols();
 
