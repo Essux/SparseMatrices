@@ -1,5 +1,4 @@
 #pragma once
-//#include "DenseMatrix.cpp"
 #include "DenseMatrix.h"
 
 class SparseMatrix {
@@ -10,8 +9,7 @@ class SparseMatrix {
         int get_n_rows();
         int get_n_cols();
 
-        SparseMatrix(int n_rows_, int n_cols_) {
-            n_rows = n_rows_;
-            n_cols = n_cols_;
-        }
+        SparseMatrix(int n_rows_, int n_cols_);
+
+        virtual vector<double> mul(vector<double> x)=0;
 };
