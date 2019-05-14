@@ -1,4 +1,5 @@
 #include "COO.h"
+#include "CSR.h"
 #include <iostream>
 #include <cstdio>
 
@@ -16,9 +17,13 @@ int main() {
         }
         cout << '\n';
     }
+    printf("-------------------------COO-------------------------");
     COO b = COO::from_dense(a);
     for (int i = 0; i < b.nonempty_values; i++) {
         printf("row %d col %d value %.2f\n", b.rows[i], b.cols[i], b.values[i]);
     }
-
+    printf("-------------------------CSR-------------------------");
+    CSR c = CSR::from_dense(a);
+    c.print_matrix();
+    printf("-------------------------CSC-------------------------");
 }

@@ -28,6 +28,11 @@ DenseMatrix COO::to_dense() {
 
 }
 
+// MISSING IMPLEMENTATION
+void COO::print_matrix() {
+    
+}
+
 COO::COO(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {
     nonempty_values = 0;
 }
