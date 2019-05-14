@@ -27,9 +27,14 @@ void CSR::print_matrix() {
     }
 }
 
-// MISSING IMPLEMENTATION
 vector<double> CSR::mul(vector<double> x) {
-
+    vector<double> R(x.size(), 0);
+    for(int i = 0, j = 0; i < nonempty_values; i++) {
+        while(IA[j + 1] == i)
+            j++;
+        R[j] += x[JA[i]] * AA[i];
+    }
+    return R;
 }
 
 // MISSING IMPLEMENTATION

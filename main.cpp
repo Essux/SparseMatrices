@@ -37,5 +37,9 @@ int main() {
     printf("-------------------------CSR-------------------------\n");
     CSR c = CSR::from_dense(a);
     c.print_matrix();
+    vector<double> ansCSR = c.mul(x);
+    for(int i = 0; i < N; i++) {
+        printf("%.3f ", ansCSR[i]);
+    } printf("\n");
     printf("-------------------------CSC-------------------------\n");
 }
