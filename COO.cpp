@@ -1,6 +1,6 @@
 #include "COO.h"
 #include <vector>
-#include <cstdio>
+#include <iostream>
 
 COO COO::from_dense(DenseMatrix mat) {
     COO repr(mat.get_n_rows(), mat.get_n_cols());
@@ -28,9 +28,20 @@ DenseMatrix COO::to_dense() {
     throw "not implemented";
 }
 
-// MISSING IMPLEMENTATION
 void COO::print_matrix() {
-    
+  cout << "AA: ";
+  for (int i = 0; i < nonempty_values; ++i) {
+    cout << values[i] << " ";
+  }
+  cout << endl << "IA: ";
+  for (int i = 0; i < nonempty_values; ++i) {
+    cout << rows[i] << " ";
+  }
+  cout << endl << "JA: ";
+  for (int i = 0; i < nonempty_values; ++i) {
+    cout << cols[i] << " ";
+  }
+  cout << endl;
 }
 
 COO::COO(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {
@@ -38,6 +49,7 @@ COO::COO(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_
 }
 
 vector<double> COO::mul(vector<double> x){
+    cout << "wenas muy wenas" << endl;
     vector<double> b(x.size(), 0);
     for (int i = 0; i < nonempty_values; i++) {
         b[rows[i]] += x[cols[i]] * values[i];
