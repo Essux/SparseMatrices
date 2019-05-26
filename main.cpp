@@ -19,26 +19,33 @@ void print_vector(vector<double> vec) {
 
 #define MAT_TYPE COO
 
-int main(int argc, char *argv[]) {
-    int N = strtol(argv[1], NULL, 10);
-    double prob = strtol(argv[2], NULL, 10)/100.0;
-
-    srand(time(NULL));
-    vector<double> arr(N*N, 0);
+int main() {
+    int N = 3;
+    vector<double> arr(N*N, 0.0);
     for (int i = 0; i < N*N; i++) {
-        if (urand()<prob) arr[i] = urand()*100;
+        cin >> arr[i];
     }
-    cout << "Creados los arr" << endl;
-    DenseMatrix DenseA(arr, N, N);
-    MAT_TYPE A = MAT_TYPE::from_dense(DenseA);
 
-    //A.print_matrix();
+    DenseMatrix a(arr, N, N);
+    printf("Dense Matrix\n");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%3.2f ", a.get_pos(i, j));
+        }
+        cout << '\n';
+    }
+    MAT_TYPE coef_mat = MAT_TYPE::from_dense(a);
 
-    cout << "Creadas las matrices" << endl;
-    vector<double> x(N, 0);
-    for (int i = 0; i < N; i++) x[i] = urand()*100;
-    //print_vector(x);
+    vector<double> b(N, 0);
+    for (int i = 0; i < N; i++) {
+        cin >> b[i];
+    }
 
-    vector<double> b = A.mul(x);
-    //print_vector(b);
+    try {
+        printf("X Vector\n");
+        vector<double> x = coef_mat.gauss_seidel_method(b, 1e-8, 40);
+        print_vector(x);
+    } catch (char const* e) {
+        cout << e << endl;
+    }
 }
