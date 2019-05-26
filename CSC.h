@@ -2,7 +2,7 @@
 #include "SparseMatrix.h"
 #include "DenseMatrix.h"
 
-class CSC : public SparseMatrix {
+class CSC : public SparseMatrix {  
  public:
   vector<double> AA;
   vector<int> IA, JA;
@@ -10,6 +10,7 @@ class CSC : public SparseMatrix {
   DenseMatrix to_dense();
   void print_matrix();
   vector<double> mul(vector<double>);
+  vector<double> jacobi(vector<double> b, double tol, int maxiter);
   
   CSC(int n_rows_, int n_cols_);
 };

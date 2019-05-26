@@ -53,4 +53,43 @@ vector<double> CSC::mul(vector<double> x) {
   return R;
 }
 
+vector<double> CSC::jacobi(vector<double> b, double tol, int maxiter){
+  nz = this.AA.size();
+  nfil = this.n_rows;
+  vector<double> x(nfil, 0);
+  int k = 0;
+  err = tol + 1;
+  while (err > tol and k <= maxiter) {
+    for (int i = 1; i < nfil; ++i) {
+      x[i] = 0;
+      int diag = 0;
+      for (int j = this.JA[i]; j < this.JA[i+1]; ++j){
+	if (i != this.IA[j]) {
+	  x[i] += AA[j] * x0[i];
+	} else {
+	  diag = AA[j];
+	}
+      }
+      x[i] = (b[i] - x[i]) / diag;
+    }
+    err = x[0] - x0[0]; // / norm(x);
+    for (int i = 0; i < x.size(); ++i) {
+      if (x[0] - x0[0] > err) {
+	err = x[0] - x0[0];
+      }
+    }
+    x0 = x;
+    k++;
+  }
+  if (k < maxiter) {
+    return x;
+  } else {
+    throw "rip";
+  }
+}
+
 CSC::CSC(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {}
+
+//          i c f g a e d h b j
+//IA rows = 6 2 4 5 1 3 2 5 1 6/
+//JA cols = 1 2 4 5 7 9 11
