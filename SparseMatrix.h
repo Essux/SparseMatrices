@@ -9,6 +9,7 @@ class SparseMatrix {
         virtual void print_matrix()=0;
         virtual vector<double> mul(vector<double> x)=0;
         virtual vector<double> jacobi_method(vector<double> b, double tolerance, int iterations)=0;
+        virtual vector<double> gauss_seidel_method(vector<double> b, double tolerance, int iterations)=0;
         int get_n_rows();
         int get_n_cols();
 

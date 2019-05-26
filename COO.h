@@ -17,11 +17,15 @@ class COO : public SparseMatrix {
     COO gaussian_elimination(vector<double> b);
     vector<double> jacobi_method(vector<double> b, double tolerance, int iterations);
     vector<double> jacobi_iteration(vector<double> x0, vector<double> b);
+    vector<double> gauss_seidel_method(vector<double> b, double tolerance, int iterations);
+    vector<double> gauss_seidel_iteration(vector<double> x0, vector<double> b);
+
+    COO(int n_rows_, int n_cols_);
 
     // Utility methods
+    private:
     double infinite_norm(vector<double> x0);
     double measure_dispersion(vector<double> x0, vector<double> x1);
     void print_matrix();
 
-    COO(int n_rows_, int n_cols_);
 };

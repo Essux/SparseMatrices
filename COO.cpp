@@ -90,6 +90,40 @@ vector<double> COO::jacobi_iteration(vector<double> x0, vector<double> b) {
     return x1;
 }
 
+vector<double> COO::gauss_seidel_method(vector<double> b, double tolerance, int iterations) {
+    vector<double> x0 (get_n_cols(), 0);
+    vector<double> x1;
+    int counter = 0;
+    double dispersion = tolerance+1;
+    while(dispersion>tolerance && counter<iterations) {
+        x1 = gauss_seidel_iteration(x0, b);
+        dispersion = measure_dispersion(x0, x1); // Uses infinite norm
+        x0 = x1;
+        counter++;
+    }
+    if (dispersion<tolerance) return x1;
+    throw "Method did not converge";
+}
+
+vector<double> COO::gauss_seidel_iteration(vector<double> x0, vector<double> b) {
+    vector<double> x1(get_n_cols(), 0);
+    for (int i = 0; i < get_n_cols(); i++) x1[i] = x0[i];
+
+    for (int row = 0; row < get_n_rows(); row++) {
+        double sum = 0;
+        double diag = 0; // Value of the diagonal
+        for (int i = 0; i < nonempty_values; i++) {
+            if (rows[i]==row) {
+                if (cols[i]==row) diag = values[i];
+                else sum += values[i]*x1[cols[i]];
+            }
+        }
+        if (diag==0.0) throw "System has a 0 in the main diagonal.";
+        x1[row] = (b[row]-sum)/diag;
+    }
+    return x1;
+}
+
 double COO::infinite_norm(vector<double> x0) {
     double norm = 0;
     for (int i = 0; i < x0.size(); i++)
