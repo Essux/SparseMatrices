@@ -14,5 +14,8 @@ class CSR : public SparseMatrix {
 
     static CSR from_dense(DenseMatrix mat);
     CSR(int n_rows_, int n_cols_);
+
+    private: 
+    double infinity_norm_distance(vector<double> x0, vector<double> x1);
 };
     
