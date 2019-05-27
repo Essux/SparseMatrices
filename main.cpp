@@ -40,7 +40,6 @@ int main() {
     for (int i = 0; i < N; i++) {
         cin >> b[i];
     }
-
     try {
         printf("X Vector\n");
         vector<double> x = coef_mat.gauss_seidel_method(b, 1e-8, 40);
