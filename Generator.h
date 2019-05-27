@@ -8,6 +8,7 @@ class Generator {
     Generator(double a, double b);
     DenseMatrix generate_dense(int rows, int cols, double fill_rate);
     DenseMatrix generate_diag_dominant(int rows, int cols, double fill_rate);
+    DenseMatrix generate_band_matrix(int rows, int cols, int upper_diag, int lower_diag);
     vector<double> generate_vector(int size);
     vector<double> generate_system(DenseMatrix A, vector<double> x);
 

@@ -45,6 +45,19 @@ DenseMatrix Generator::generate_diag_dominant(int rows, int cols, double fill_ra
     return mat;
 }
 
+// Generates a band matrix. Upper_diag and lower_diag represent upper and
+// lower limits of the band where 0 is the main diagonal
+DenseMatrix Generator::generate_band_matrix(int rows, int cols, int upper_diag, int lower_diag) {
+    DenseMatrix mat(rows, cols);
+    for (int i = 0; i < rows; i++) {
+        for (int j = max(0, i-lower_diag); j < min(cols, i+upper_diag+1); j++) {
+            mat.set_pos(i, j, urand(a, b));
+        }
+    }
+    return mat;
+}
+
+
 vector<double> Generator::generate_vector(int size) {
     vector<double> vec(size, 0);
     for (int i = 0; i < size; i++)
