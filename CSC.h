@@ -2,7 +2,7 @@
 #include "SparseMatrix.h"
 #include "DenseMatrix.h"
 
-class CSC : public SparseMatrix {  
+class CSC : public SparseMatrix {
  public:
   vector<double> AA;
   vector<int> IA, JA;
