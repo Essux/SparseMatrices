@@ -6,6 +6,7 @@
 #include <cmath>
 #include <cassert>
 
+
 CSR CSR::from_dense(DenseMatrix mat)
 {
     CSR repr(mat.get_n_rows(), mat.get_n_cols());
@@ -17,6 +18,7 @@ CSR CSR::from_dense(DenseMatrix mat)
         for (int j = 0; j < mat.get_n_cols(); j++)
         {
             double val = mat.get_pos(i, j);
+
             if (val != (val - val))
             {
                 repr.AA.push_back(val);
@@ -51,6 +53,7 @@ void CSR::print_matrix()
     cout << endl;
 }
 
+
 vector<double> CSR::mul(vector<double> x)
 {
     vector<double> R(x.size(), 0);
@@ -66,7 +69,7 @@ vector<double> CSR::mul(vector<double> x)
 // MISSING IMPLEMENTATION
 DenseMatrix CSR::to_dense()
 {
-}
+
 
 CSR::CSR(int n_rows_, int n_cols_) : SparseMatrix(n_rows_, n_cols_)
 {
