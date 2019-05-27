@@ -1,7 +1,6 @@
 #include "CSC.h"
 #include <vector>
 #include <iostream>
-#include <cmath>
 
 CSC CSC::from_dense(DenseMatrix mat) {
   CSC repr(mat.get_n_rows(), mat.get_n_cols());
@@ -55,7 +54,3 @@ vector<double> CSC::mul(vector<double> x) {
 }
 
 CSC::CSC(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {}
-
-//          i c f g a e d h b j
-//IA rows = 6 2 4 5 1 3 2 5 1 6/
-//JA cols = 1 2 4 5 7 9 11
