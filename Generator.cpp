@@ -57,7 +57,6 @@ DenseMatrix Generator::generate_band_matrix(int rows, int cols, int upper_diag, 
     return mat;
 }
 
-
 vector<double> Generator::generate_vector(int size) {
     vector<double> vec(size, 0);
     for (int i = 0; i < size; i++)
