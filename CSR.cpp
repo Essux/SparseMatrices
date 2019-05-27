@@ -68,7 +68,7 @@ vector<double> CSR::mul(vector<double> x)
 
 // MISSING IMPLEMENTATION
 DenseMatrix CSR::to_dense()
-{
+{}
 
 
 CSR::CSR(int n_rows_, int n_cols_) : SparseMatrix(n_rows_, n_cols_)
