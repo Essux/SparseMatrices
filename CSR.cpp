@@ -1,6 +1,6 @@
 #include "CSR.h"
 #include <vector>
-#include <cstdio>
+#include <iostream>
 
 CSR CSR::from_dense(DenseMatrix mat) {
     CSR repr(mat.get_n_rows(), mat.get_n_cols());
@@ -10,7 +10,7 @@ CSR CSR::from_dense(DenseMatrix mat) {
 
         for(int j = 0; j < mat.get_n_cols(); j++) {
             double val = mat.get_pos(i, j);
-            if(val != (val - val)) {    
+            if(val != (val - val)) {
                 repr.AA.push_back(val);
                 repr.JA.push_back(j);
                 repr.nonempty_values++;
@@ -22,9 +22,19 @@ CSR CSR::from_dense(DenseMatrix mat) {
 }
 
 void CSR::print_matrix() {
-    for(int i = 0; i < nonempty_values; i++) {
-        printf("row %d col %d value %.2f\n", IA[i], JA[i], AA[i]);
+    cout << "AA: ";
+    for (int i = 0; i < AA.size(); ++i) {
+        cout << AA[i] << " ";
     }
+    cout << endl << "IA: ";
+    for (int i = 0; i < IA.size(); ++i) {
+        cout << IA[i] << " ";
+    }
+    cout << endl << "JA: ";
+    for (int i = 0; i < JA.size(); ++i) {
+        cout << JA[i] << " ";
+    }
+    cout << endl;
 }
 
 vector<double> CSR::mul(vector<double> x) {
@@ -39,7 +49,7 @@ vector<double> CSR::mul(vector<double> x) {
 
 // MISSING IMPLEMENTATION
 DenseMatrix CSR::to_dense() {
-    
+
 }
 
 CSR::CSR(int n_rows_, int n_cols_) : SparseMatrix(n_rows_, n_cols_) {

@@ -12,8 +12,21 @@ class COO : public SparseMatrix {
     void add_value(double val, int row, int col);
     static COO from_dense(DenseMatrix mat);
     DenseMatrix to_dense();
+
     vector<double> mul(vector<double> x);
-    void print_matrix();
+    COO gaussian_elimination(vector<double> b);
+    vector<double> jacobi_method(vector<double> b, double tolerance, int iterations);
+    vector<double> jacobi_iteration(vector<double> x0, vector<double> b);
+    vector<double> gauss_seidel_method(vector<double> b, double tolerance, int iterations);
+    vector<double> gauss_seidel_iteration(vector<double> x0, vector<double> b);
 
     COO(int n_rows_, int n_cols_);
+
+    // Utility methods
+    void print_matrix();
+    COO augment_matrix(vector<double> b);
+    private:
+    double infinite_norm(vector<double> x0);
+    double measure_dispersion(vector<double> x0, vector<double> x1);
+
 };
