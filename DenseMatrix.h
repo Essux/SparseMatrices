@@ -17,6 +17,8 @@ class DenseMatrix {
         vector<double> mul(vector<double> x);
         vector<double> jacobi_method(vector<double> b, double tolerance, int iterations);
         vector<double> jacobi_iteration(vector<double> x0, vector<double> b);
+        vector<double> gauss_seidel_method(vector<double> b, double tolerance, int iterations);
+        vector<double> gauss_seidel_iteration(vector<double> x0, vector<double> b);
 
         private:
         double infinite_norm(vector<double> x0);
