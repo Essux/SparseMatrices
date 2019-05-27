@@ -9,12 +9,22 @@ double DenseMatrix::get_pos(int row, int col) {
     return mat[row*n_cols + col];
 }
 
+void DenseMatrix::set_pos(int row, int col, double val) {
+    mat[row*n_cols + col] = val;
+}
+
 DenseMatrix::DenseMatrix(vector<double> mat_, int rows_, int cols_) {
     n_rows = rows_;
     n_cols = cols_;
     mat.assign(n_rows * n_cols, 0);
     for(int i = 0; i < n_rows * n_cols; i++)
         mat[i] = mat_[i];
+}
+
+DenseMatrix::DenseMatrix(int rows_, int cols_) {
+    n_rows = rows_;
+    n_cols = cols_;
+    mat.assign(n_rows * n_cols, 0);
 }
 
 int DenseMatrix::get_n_cols() {
@@ -119,4 +129,34 @@ double DenseMatrix::measure_dispersion(vector<double> x0, vector<double> x1) {
         x[i] = x1[i] - x0[i];
     }
     return infinite_norm(x);
+}
+
+DenseMatrix DenseMatrix::gaussian_elimination(vector<double> b) {
+    DenseMatrix aug_mat = augment_matrix(b);
+    aug_mat.print_matrix();
+
+    for (int pivot = 0; pivot < aug_mat.get_n_rows()-1; pivot++) {
+        for (int i = pivot+1; i < aug_mat.get_n_rows(); i++) {
+            if (aug_mat.get_pos(pivot, pivot)==0.0)
+                throw "System has a 0 in the main diagonal.";
+
+            double multiplier = aug_mat.get_pos(i, pivot)/aug_mat.get_pos(pivot, pivot);
+
+            for (int j = pivot; j < aug_mat.get_n_cols(); j++)
+                aug_mat.set_pos(i, j, aug_mat.get_pos(i, j) - aug_mat.get_pos(pivot, j)*multiplier);
+
+        }
+    }
+    return aug_mat;
+}
+
+DenseMatrix DenseMatrix::augment_matrix(vector<double> b) {
+    DenseMatrix new_mat(get_n_rows(), get_n_cols()+1);
+    for (int i = 0; i < get_n_rows(); i++) {
+        for (int j = 0; j < get_n_cols(); j++) {
+            new_mat.set_pos(i, j, get_pos(i, j));
+        }
+        new_mat.set_pos(i, get_n_cols(), b[i]);
+    }
+    return new_mat;
 }
