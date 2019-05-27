@@ -63,19 +63,19 @@ vector<double> CSC::jacobi_method(vector<double> b, double tol, int maxiter) {
   double err = tol + 1;
   vector<double> diag(ncol, 0);
   while (err > tol and k < maxiter) {
-    for (int i = 0; i < get_n_rows(); ++i) {
+    for (int i = 0; i < ncol; ++i) {
       x[i] = 0;
     }
     for (int i = 0; i < ncol; ++i) {
       for (int j = JA[i]; j < JA[i+1]; ++j){
 	if (i != IA[j]) {
-	  x[IA[j]] += AA[j] * x0[IA[j]];
+	  x[IA[j]] += AA[j] * x0[i];
 	} else {
 	  diag[i] = AA[j];
 	}
       }
     }
-    for (int i = 0; i < get_n_rows(); ++i) {
+    for (int i = 0; i < ncol; ++i) {
       x[i] = (b[i] - x[i]) / diag[i];
     }
     err = abs(x[0] - x0[0]); //  norm(x-x0);
@@ -100,24 +100,24 @@ vector<double> CSC::jacobi_method(vector<double> b, double tol, int maxiter) {
   throw "rip";
 }
 
-vector<double> CSC::gauss_seidel_method(vector<double> b, double w, double tol, int maxiter) {
+vector<double> CSC::successive_over_relaxation(vector<double> b, double w, double tol, int maxiter) {
   int nz = AA.size();
-  int ncol = get_n_cols();
+  int ncol = b.size();
   vector<double> x(ncol, 0);
   vector<double> x0(ncol, 0);
   int k = 0;
   double err = tol + 1;
   vector<double> diag(ncol, 0);
   while (err > tol and k < maxiter) {
-    for (int i = 0; i < get_n_rows(); ++i) {
+    for (int i = 0; i < ncol; ++i) {
       x[i] = 0;
       for (int j = 0; j < JA.size()-1; ++j) {
         for (int k = JA[j]; k < JA[j+1]; ++k) {
 	  if (i == IA[k]) {
 	    if (i < j) {
-	      x[i] += AA[k] * x0[i];
+	      x[i] += AA[k] * x0[j];
 	    } else if (i > j) {
-	      x[i] += AA[k] * x[i];
+	      x[i] += AA[k] * x[j];
 	    } else {
 	      diag[i] = AA[k];
 	    }
@@ -149,8 +149,8 @@ vector<double> CSC::gauss_seidel_method(vector<double> b, double w, double tol, 
   throw "rip";
 }
 
-CSC::CSC(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {}
+vector<double> CSC::gauss_seidel_method(vector<double> b, double tol, int maxiter) {
+  return successive_over_relaxation(b, 1.0, tol, maxiter);
+}
 
-//          i c f g a e d h b j
-//IA rows = 6 2 4 5 1 3 2 5 1 6/
-//JA cols = 1 2 4 5 7 9 11
+CSC::CSC(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {}
