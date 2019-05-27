@@ -67,7 +67,6 @@ vector<double> MSR::jacobi_method(vector<double> b, double tol, int maxiter) {
   vector<double> x0(nrows, 0);
   int k = 0;
   double err = tol + 1;
-  vector<double> diag(nrows, 0);
   while (err > tol and k < maxiter) {
     for (int i = 0; i < get_n_rows(); ++i) {
       x[i] = 0;
@@ -105,7 +104,6 @@ vector<double> MSR::successive_over_relaxation(vector<double> b, double w, doubl
   vector<double> x0(nrows, 0);
   int k = 0;
   double err = tol + 1;
-  vector<double> diag(nrows, 0);
   while (err > tol and k < maxiter) {
     for (int i = 0; i < get_n_rows(); ++i) {
       x[i] = 0;
