@@ -20,7 +20,8 @@ class DenseMatrix {
         vector<double> jacobi_method(vector<double> b, double tolerance, int iterations);
         vector<double> jacobi_iteration(vector<double> x0, vector<double> b);
         vector<double> gauss_seidel_method(vector<double> b, double tolerance, int iterations);
-        vector<double> gauss_seidel_iteration(vector<double> x0, vector<double> b);
+        vector<double> successive_over_relaxation(vector<double> b, double relaxation_factor, double tolerance, int max_iterations);
+        vector<double> sor_iteration(vector<double> x0, vector<double> b, double relaxation_factor);
         DenseMatrix gaussian_elimination(vector<double> b);
 
         DenseMatrix augment_matrix(vector<double> b);

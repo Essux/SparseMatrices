@@ -83,13 +83,13 @@ vector<double> DenseMatrix::jacobi_iteration(vector<double> x0, vector<double> b
     return x1;
 }
 
-vector<double> DenseMatrix::gauss_seidel_method(vector<double> b, double tolerance, int iterations) {
+vector<double> DenseMatrix::successive_over_relaxation(vector<double> b, double relaxation_factor, double tolerance, int iterations) {
     vector<double> x0 (get_n_cols(), 0);
     vector<double> x1;
     int counter = 0;
     double dispersion = tolerance+1;
     while(dispersion>tolerance && counter<iterations) {
-        x1 = gauss_seidel_iteration(x0, b);
+        x1 = sor_iteration(x0, b, relaxation_factor);
         dispersion = measure_dispersion(x0, x1); // Uses infinite norm
         x0 = x1;
         counter++;
@@ -98,7 +98,7 @@ vector<double> DenseMatrix::gauss_seidel_method(vector<double> b, double toleran
     throw "Method did not converge";
 }
 
-vector<double> DenseMatrix::gauss_seidel_iteration(vector<double> x0, vector<double> b) {
+vector<double> DenseMatrix::sor_iteration(vector<double> x0, vector<double> b, double relaxation_factor) {
     vector<double> x1(get_n_cols(), 0);
     for (int i = 0; i < get_n_cols(); i++)
         x1[i] = x0[i];
@@ -111,9 +111,14 @@ vector<double> DenseMatrix::gauss_seidel_iteration(vector<double> x0, vector<dou
         for (int col = 0; col < get_n_cols(); col++)
             if (col!=row) sum += get_pos(row, col) * x1[col];
 
-        x1[row] = (b[row]-sum)/get_pos(row, row);
+        x1[row] = (1-relaxation_factor) * x1[row];
+        x1[row] += relaxation_factor*(b[row]-sum)/get_pos(row, row);
     }
     return x1;
+}
+
+vector<double> DenseMatrix::gauss_seidel_method(vector<double> b, double tolerance, int iterations) {
+    return successive_over_relaxation(b, 1.0, tolerance, iterations);
 }
 
 double DenseMatrix::infinite_norm(vector<double> x0) {
