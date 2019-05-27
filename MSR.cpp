@@ -60,4 +60,90 @@ vector<double> MSR::mul(vector<double> x) {
   return R;
 }
 
+vector<double> MSR::jacobi_method(vector<double> b, double tol, int maxiter) {
+  int nz = AA.size();
+  int nrows = b.size();
+  vector<double> x(nrows, 0);
+  vector<double> x0(nrows, 0);
+  int k = 0;
+  double err = tol + 1;
+  vector<double> diag(nrows, 0);
+  while (err > tol and k < maxiter) {
+    for (int i = 0; i < get_n_rows(); ++i) {
+      x[i] = 0;
+      for (int j = AJ[i]; j < AJ[i+1]; ++j) {
+	x[i] += AA[j] * x0[AJ[j]];
+      }
+      x[i] = (b[i] - x[i]) / AA[i];
+    }
+    err = abs(x[0] - x0[0]); //  norm(x-x0);
+    for (int i = 0; i < x.size(); ++i) {
+      if (abs(x[i] - x0[i]) > err) {
+	err = abs(x[i] - x0[i]);
+      }
+    }
+    double div = x[0];
+    for (int i = 0; i < x.size(); ++i) {
+      if (x[i] > div) {
+	div = x[i];
+      }
+    }
+    err /= div;
+    x0 = x;
+    k++;
+  }
+  if (k < maxiter) {
+    return x;
+  }
+  throw "rip";
+}
+
+vector<double> MSR::successive_over_relaxation(vector<double> b, double w, double tol, int maxiter) {
+  int nz = AA.size();
+  int nrows = b.size();
+  vector<double> x(nrows, 0);
+  vector<double> x0(nrows, 0);
+  int k = 0;
+  double err = tol + 1;
+  vector<double> diag(nrows, 0);
+  while (err > tol and k < maxiter) {
+    for (int i = 0; i < get_n_rows(); ++i) {
+      x[i] = 0;
+      for (int j = AJ[i]; j < AJ[i+1]; ++j) {
+        if (i < AJ[j]){
+	  x[i] += AA[j] * x0[AJ[j]];
+	} else {
+	  x[i] += AA[j] * x[AJ[j]];
+	}
+      }
+      x[i] = (b[i] - x[i]) / AA[i];
+      x[i] = w*x[i] + (1-w)*x0[i];
+    }
+    err = abs(x[0] - x0[0]); //  norm(x-x0);
+    for (int i = 0; i < x.size(); ++i) {
+      if (abs(x[i] - x0[i]) > err) {
+	err = abs(x[i] - x0[i]);
+      }
+    }
+    double div = x[0];
+    for (int i = 0; i < x.size(); ++i) {
+      if (x[i] > div) {
+	div = x[i];
+      }
+    }
+    err /= div;
+    x0 = x;
+    k++;
+  }
+  if (k < maxiter) {
+    return x;
+  }
+  throw "rip";
+}
+
+
+vector<double> MSR::gauss_seidel_method(vector<double> b, double tol, int maxiter) {
+  return successive_over_relaxation(b, 1.0, tol, maxiter);
+}
+
 MSR::MSR(int n_rows_, int n_cols_) : SparseMatrix::SparseMatrix(n_rows_, n_cols_) {}
