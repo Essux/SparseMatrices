@@ -1,45 +1,40 @@
 #include "COO.h"
 #include "CSR.h"
+#include "CSC.h"
+#include "Generator.h"
 #include <iostream>
 #include <cstdio>
 
 using namespace std;
 
+void print_vector(vector<double> vec) {
+    for (int i = 0; i < vec.size(); i++) printf("%.2f ", vec[i]);
+    printf("\n");
+}
+
+#define MAT_TYPE COO
+
 int main() {
-    int N = 3;
-    vector<double> arr(N*N, 0.0);
-    for (int i = 0; i < N*N; i++) {
-        cin >> arr[i];
-    }
+    int N; cout << "Enter matrix dimension: ";
+    cin >> N;
 
-    DenseMatrix a(arr, N, N);
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            printf("%3.2f ", a.get_pos(i, j));
-        }
-        cout << '\n';
-    }
-    COO b = COO::from_dense(a);
-    for (int i = 0; i < b.nonempty_values; i++) {
-        printf("row %d col %d value %.2f\n", b.rows[i], b.cols[i], b.values[i]);
-    }
+    Generator gen(0, 100);
+    DenseMatrix A = gen.generate_diag_dominant(N, N, 1);
+    A.print_matrix();
+    vector<double> x_real = gen.generate_vector(N);
+    vector<double> b = gen.generate_system(A, x_real);
+    printf("Vector B\n");
+    print_vector(b);
 
-    vector<double> x(N, 0);
-    for (int i = 0; i < N; i++) {
-        cin >> x[i];
+    MAT_TYPE A_sparse = MAT_TYPE::from_dense(A);
+
+    try {
+        vector<double> x_aprox = A_sparse.gauss_seidel_method(b, 1e-5, 20);
+        printf("X Vector Aprox\n");
+        print_vector(x_aprox);
+        printf("X Vector Real\n");
+        print_vector(x_real);
+    } catch (char const* e) {
+        cout << e << endl;
     }
-
-    vector<double> ans = b.mul(x);
-    for (int i = 0; i < N; i++) {
-        printf("%.3f ", ans[i]);
-    } printf("\n");
-
-    printf("-------------------------CSR-------------------------\n");
-    CSR c = CSR::from_dense(a);
-    c.print_matrix();
-    vector<double> ansCSR = c.mul(x);
-    for(int i = 0; i < N; i++) {
-        printf("%.3f ", ansCSR[i]);
-    } printf("\n");
-    printf("-------------------------CSC-------------------------\n");
 }

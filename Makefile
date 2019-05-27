@@ -1,5 +1,5 @@
 DEPS = %.h
-OBJ = CSR.o CSC.o COO.o MSR.o DenseMatrix.o SparseMatrix.o
+OBJ = CSR.o CSC.o COO.o MSR.o DenseMatrix.o SparseMatrix.o Generator.o
 
 main: $(OBJ) main.cpp
 	g++ -o $@ $^
