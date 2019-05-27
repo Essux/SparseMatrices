@@ -10,6 +10,8 @@ class DenseMatrix {
     public:
         int get_n_rows();
         int get_n_cols();
+        void print_matrix();
         double get_pos(int row, int col);
         DenseMatrix(vector<double> mat_, int rows_, int cols_);
+        vector<double> mul(vector<double> x);
 };
