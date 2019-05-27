@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdio>
+#include <map>
 
 COO COO::from_dense(DenseMatrix mat) {
     COO repr(mat.get_n_rows(), mat.get_n_cols());
@@ -137,4 +138,72 @@ double COO::measure_dispersion(vector<double> x0, vector<double> x1) {
         x[i] = x1[i] - x0[i];
     }
     return infinite_norm(x);
+}
+
+COO COO::gaussian_elimination(vector<double> b) {
+    COO cur_coef = augment_matrix(b);
+    for (int pivot = 0; pivot < cur_coef.get_n_rows()-1; pivot++) {
+        // Map with nonzero values from the pivot column
+        map<int, double> multipliers;
+        bool found_diag = false;
+        for (int i = 0; i < cur_coef.nonempty_values; i++) {
+            if (cur_coef.cols[i]==pivot) {
+                if (cur_coef.rows[i]==pivot) {
+                    if (cur_coef.values[i]==0.0) throw "System has a 0 in the main diagonal.";
+                    found_diag = true;
+                }
+                multipliers[cur_coef.rows[i]] = cur_coef.values[i];
+            }
+        }
+        if (!found_diag) throw "System has a 0 in the main diagonal.";
+
+        // Mantain only positions with nonzero values to construct next matrix
+        map<pair<int, int>, double> fill_in;
+        for (int i = 0; i < cur_coef.nonempty_values; i++) {
+            // Mantain values from previous (to the pivot) rows and cols greater than pivot
+            if (cur_coef.cols[i]!=pivot || cur_coef.rows[i]<=pivot) {
+                pair<int, int> pair_pos = make_pair(cur_coef.rows[i], cur_coef.cols[i]);
+                fill_in[pair_pos] += cur_coef.values[i];
+            }
+        }
+        for (int i = 0; i < cur_coef.nonempty_values; i++) {
+            // For every (nonzero) position of the pivot row substract the multiplier
+            // to the other rows on the same column
+            if (cur_coef.cols[i]>pivot && cur_coef.rows[i]==pivot) {
+                for (int j = pivot+1; j<cur_coef.get_n_rows(); j++) {
+                    pair<int, int> pair_pos = make_pair(j, cur_coef.cols[i]);
+                    if (multipliers.count(j)) {
+                        fill_in[pair_pos] -= cur_coef.values[i]*multipliers[j]/multipliers[pivot];
+                    }
+                }
+            }
+        }
+
+        // Add the values on the map (the next nonzero values) to a new matrix
+        COO next_coef(cur_coef.get_n_rows(), cur_coef.get_n_cols());
+        for (map<pair<int, int>, double>::iterator it = fill_in.begin(); it!=fill_in.end(); it++) {
+            int row = it->first.first;
+            int col = it->first.second;
+            double val = it->second;
+            next_coef.add_value(val, row, col);
+        }
+        cur_coef = next_coef;
+    }
+    return cur_coef;
+}
+
+COO COO::augment_matrix(vector<double> b) {
+    COO new_mat(get_n_rows(), get_n_cols()+1);
+    int i = 0, j = 0;
+    while (j < b.size() || i < nonempty_values) {
+        while (i<nonempty_values && j==rows[i]) {
+            new_mat.add_value(values[i], rows[i], cols[i]);
+            i++;
+        }
+        while (j<b.size() && (i>=nonempty_values || j<rows[i])) {
+            new_mat.add_value(b[j], j, get_n_cols());
+            j++;
+        }
+    }
+    return new_mat;
 }

@@ -23,9 +23,10 @@ class COO : public SparseMatrix {
     COO(int n_rows_, int n_cols_);
 
     // Utility methods
+    void print_matrix();
+    COO augment_matrix(vector<double> b);
     private:
     double infinite_norm(vector<double> x0);
     double measure_dispersion(vector<double> x0, vector<double> x1);
-    void print_matrix();
 
 };
