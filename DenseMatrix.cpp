@@ -138,7 +138,6 @@ double DenseMatrix::measure_dispersion(vector<double> x0, vector<double> x1) {
 
 DenseMatrix DenseMatrix::gaussian_elimination(vector<double> b) {
     DenseMatrix aug_mat = augment_matrix(b);
-    aug_mat.print_matrix();
 
     for (int pivot = 0; pivot < aug_mat.get_n_rows()-1; pivot++) {
         for (int i = pivot+1; i < aug_mat.get_n_rows(); i++) {
